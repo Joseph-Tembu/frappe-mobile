@@ -22,7 +22,6 @@ class FrappeBottomSheet extends StatelessWidget {
     this.onActionButtonPress,
     this.showLeading = true,
   });
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,30 +37,27 @@ class FrappeBottomSheet extends StatelessWidget {
         automaticallyImplyLeading: false,
         elevation: 0,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            showLeading
-                ? FlatButton(
-                    child: Text(
-                      leadingText ?? 'Cancel',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: FrappePalette.blue[500],
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    padding: EdgeInsets.zero,
-                    minWidth: 70,
-                    onPressed: leadingOnPressed ??
-                        () {
-                          Navigator.of(context).pop();
-                        },
-                  )
-                : FlatButton(
-                    padding: EdgeInsets.zero,
-                    child: Container(),
-                    onPressed: null,
-                  ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+        showLeading
+        ? TextButton(
+        onPressed: leadingOnPressed ??
+        () {
+      Navigator.of(context).pop();
+      },
+        child: Text(
+          leadingText ?? 'Cancel',
+          style: TextStyle(
+            fontSize: 13,
+            color: FrappePalette.blue[500],
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      )
+          : TextButton(
+      onPressed: null,
+      child: Container(),
+    ),
             Padding(
               padding: const EdgeInsets.all(18.0),
               child: Text(

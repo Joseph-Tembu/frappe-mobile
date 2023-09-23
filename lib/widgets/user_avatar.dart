@@ -6,7 +6,7 @@ import 'package:frappe_app/config/frappe_palette.dart';
 import 'package:frappe_app/utils/enums.dart';
 
 import '../model/offline_storage.dart';
-import '../utils/helpers.dart';
+import '../utils/help.dart';
 import '../utils/http.dart';
 
 class UserAvatar extends StatelessWidget {

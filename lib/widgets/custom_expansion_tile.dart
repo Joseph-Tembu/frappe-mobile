@@ -1,6 +1,3 @@
-// Copyright 2014 The Flutter Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -289,15 +286,19 @@ class _CustomExpansionTileState extends State<CustomExpansionTile>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+
     _borderColorTween.end = theme.dividerColor;
     _headerColorTween
       ..begin = theme.textTheme.subtitle1!.color
-      ..end = theme.accentColor;
+      ..end = colorScheme.secondary; // Use secondary from ColorScheme
     _iconColorTween
       ..begin = theme.unselectedWidgetColor
-      ..end = theme.accentColor;
+      ..end = colorScheme.secondary; // Use secondary from ColorScheme
+
     super.didChangeDependencies();
   }
+
 
   @override
   Widget build(BuildContext context) {

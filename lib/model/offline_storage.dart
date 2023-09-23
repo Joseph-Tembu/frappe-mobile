@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
-
 import '../app/locator.dart';
-
 import '../model/desktop_page_response.dart';
 import '../model/doctype_response.dart';
 
@@ -12,7 +10,7 @@ import '../services/storage_service.dart';
 import '../services/api/api.dart';
 
 import '../utils/constants.dart';
-import '../utils/helpers.dart';
+import '../utils/help.dart';
 import 'common.dart';
 import 'config.dart';
 
@@ -173,7 +171,7 @@ class OfflineStorage {
     try {
       var linkData = await locator<Api>().searchLink(
         doctype: doctype,
-        pageLength: 9999,
+        pageLength: 9999, refDoctype: '', txt: '',
       );
       cache['${doctype}LinkFull'] = linkData;
     } catch (e) {
@@ -196,7 +194,7 @@ class OfflineStorage {
         fieldnames: generateFieldnames(doctype, docMeta.docs[0]),
         pageLength: Constants.offlinePageSize,
         offset: 0,
-        meta: docMeta.docs[0],
+        meta: docMeta.docs[0], filters: [],
       );
 
       cache['${doctype}List'] = docList;

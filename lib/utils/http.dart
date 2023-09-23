@@ -1,9 +1,10 @@
 import '../app/locator.dart';
 import '../services/api/api.dart';
 
-import '../utils/dio_helper.dart';
+import '../utils/dio_help.dart';
 import '../model/offline_storage.dart';
 import '../model/config.dart';
+import 'help.dart';
 
 initApiConfig() async {
   if (Config().baseUrl != null) {
@@ -31,13 +32,26 @@ Future<void> cacheAllUsers() async {
     try {
       var meta = await locator<Api>().getDoctype('User');
 
+
+
+
+      int pageLength = 10; // Replace 10 with your desired page length
+
       var res = await locator<Api>().fetchList(
         fieldnames: fieldNames,
         doctype: 'User',
         orderBy: '`tabUser`.`modified` desc',
         filters: filters,
         meta: meta.docs[0],
+        offset: pageLength,
+        pageLength: pageLength, // Use the defined variable here
       );
+
+
+
+
+
+
 
       var usr = {};
       res.forEach(

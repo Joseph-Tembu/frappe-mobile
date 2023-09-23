@@ -11,7 +11,7 @@ import 'package:frappe_app/utils/constants.dart';
 import 'package:frappe_app/utils/enums.dart';
 
 import 'package:frappe_app/utils/frappe_icon.dart';
-import 'package:frappe_app/utils/helpers.dart';
+import 'package:frappe_app/utils/help.dart';
 import 'package:frappe_app/views/base_view.dart';
 import 'package:frappe_app/views/form_view/bottom_sheets/attachments/view_attachments_bottom_sheet_viewmodel.dart';
 
@@ -325,6 +325,14 @@ class AttachmentsList extends StatelessWidget {
       itemCount: filteredAttachments.length,
       shrinkWrap: true,
       itemBuilder: (context, index) {
+        Future<void> downloadFile(String fileUrl, String downloadPath) async {
+          // Implement your file download logic here
+          // You can use packages like http, dio, or any other to download the file.
+          // For this example, we'll use a hypothetical download function.
+          // Replace this with your actual download logic.
+          // Example:
+          // await yourDownloadFunction(fileUrl, downloadPath);
+        }
         return ListTile(
           onTap: () async {
             var attachment = filteredAttachments[index];
@@ -341,6 +349,10 @@ class AttachmentsList extends StatelessWidget {
               downloadFile(attachment.fileUrl, downloadPath);
             }
           },
+
+
+
+
           title: Text(filteredAttachments[index].fileName),
           subtitle: Text('15 Sep, 2020'),
           leading: Container(
@@ -386,6 +398,14 @@ class AttachmentsGrid extends StatelessWidget {
         var ext = attachments[index].fileName.split('.').last;
         var isImage = Constants.imageExtensions.indexOf(ext) != -1;
 
+        Future<void> downloadFile(String fileUrl, String downloadPath) async {
+          // Implement your download logic here
+          // You can use packages like http or dio to download files
+          // Example using http package:
+          // final response = await http.get(fileUrl);
+          // final file = io.File("$downloadPath/${fileUrl.split('/').last}");
+          // await file.writeAsBytes(response.bodyBytes);
+        }
         return GestureDetector(
           onTap: () async {
             var attachment = attachments[index];
@@ -405,6 +425,9 @@ class AttachmentsGrid extends StatelessWidget {
               print(e);
             }
           },
+
+
+
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(

@@ -7,7 +7,6 @@ import 'package:frappe_app/model/desk_sidebar_items_response.dart';
 import 'package:frappe_app/model/desktop_page_response.dart';
 import 'package:frappe_app/views/form_view/form_view.dart';
 import 'package:injectable/injectable.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import '../../app/locator.dart';
 
@@ -19,7 +18,7 @@ import '../../services/api/api.dart';
 import '../../model/config.dart';
 import '../../utils/constants.dart';
 import '../../utils/enums.dart';
-import '../../utils/helpers.dart';
+import '../../utils/help.dart';
 
 import '../../views/base_viewmodel.dart';
 
@@ -252,17 +251,17 @@ class ListViewViewModel extends BaseViewModel {
     required String name,
     required BuildContext context,
   }) {
-    {
-      pushNewScreen(
-        context,
-        screen: FormView(
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FormView(
           name: name,
           meta: meta.docs[0],
         ),
-        withNavBar: true,
-      );
-    }
+      ),
+    );
   }
+
 
   // onButtonTap({
   //   @required String key,
@@ -341,14 +340,20 @@ class ListViewViewModel extends BaseViewModel {
     var _meta = await OfflineStorage.getMeta(doctype);
 
     if (_meta.docs[0].issingle == 1) {
-      pushNewScreen(
+
+
+      Navigator.push(
         context,
-        screen: FormView(
-          meta: _meta.docs[0],
-          name: _meta.docs[0].name,
+        MaterialPageRoute(
+          builder: (context) => FormView(
+            meta: _meta.docs[0],
+            name: _meta.docs[0].name,
+          ),
         ),
-        withNavBar: true,
       );
+
+
+
     } else {
       Navigator.of(context).pop();
       meta = _meta;

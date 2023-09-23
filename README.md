@@ -5,7 +5,7 @@ We are deprecating mobile apps as [discussed here](https://discuss.erpnext.com/t
 If you willing to take the development forward, you can fork the repo and continue the development.
 
 
-# Frappe Mobile
+# Frappe Mob[app](lib%2Fapp)ile
 
 Access your ERPNext desk or any other Frappe desk anytime from your smartphone.
 

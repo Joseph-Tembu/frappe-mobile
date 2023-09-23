@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -69,98 +68,96 @@ class CustomFormBuilderCheckbox extends FormBuilderField<bool> {
 
   /// Creates a single Checkbox field
   CustomFormBuilderCheckbox({
-    //From Super
-    Key key,
-    @required String name,
-    FormFieldValidator<bool> validator,
-    bool initialValue,
-    InputDecoration decoration = const InputDecoration(
-      border: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      enabledBorder: InputBorder.none,
-      errorBorder: InputBorder.none,
-      disabledBorder: InputBorder.none,
+    // From Super
+    required Key key,
+    required String name,
+    required FormFieldValidator<bool> validator,
+    required bool initialValue,
+    InputDecoration? decoration = const InputDecoration(
+      contentPadding: EdgeInsets.zero, // Define contentPadding here
     ),
-    ValueChanged onChanged,
-    ValueTransformer<bool> valueTransformer,
+    required ValueChanged onChanged,
+    required ValueTransformer<bool> valueTransformer,
     bool enabled = true,
-    FormFieldSetter<bool> onSaved,
+    required FormFieldSetter<bool> onSaved,
     AutovalidateMode autovalidateMode = AutovalidateMode.disabled,
-    VoidCallback onReset,
-    FocusNode focusNode,
-    this.activeColor,
-    @required this.label,
-    this.checkColor,
-    this.subtitle,
-    this.secondary,
+    required VoidCallback onReset,
+    required FocusNode focusNode,
+    required this.activeColor,
+    required this.label,
+    required this.checkColor,
+    required this.subtitle,
+    required this.secondary,
     this.controlAffinity = ListTileControlAffinity.leading,
     this.contentPadding = EdgeInsets.zero,
     this.autofocus = false,
     this.tristate = false,
     this.selected = false,
   }) : super(
-          key: key,
-          initialValue: initialValue,
-          name: name,
-          validator: validator,
-          valueTransformer: valueTransformer,
-          onChanged: onChanged,
-          autovalidateMode: autovalidateMode,
-          onSaved: onSaved,
-          enabled: enabled,
-          onReset: onReset,
-          decoration: decoration,
-          focusNode: focusNode,
-          builder: (FormFieldState<bool> field) {
-            final state = field as _CustomFormBuilderCheckboxState;
+    key: key,
+    initialValue: initialValue,
+    name: name,
+    validator: validator,
+    // valueTransformer: valueTransformer,
+    onChanged: onChanged,
+    autovalidateMode: autovalidateMode,
+    onSaved: onSaved,
+    enabled: enabled,
+    onReset: onReset,
+    // decoration: decoration,
+    focusNode: focusNode,
+    builder: (FormFieldState<bool> field) {
+      final state = field as _CustomFormBuilderCheckboxState;
 
-            return InputDecorator(
-              decoration: state.decoration,
-              child: GestureDetector(
-                onTap: state.enabled
-                    ? () {
-                        final newValue = !(field.value ?? false);
-                        state.requestFocus();
-                        state.didChange(newValue);
+      return InputDecorator(
+        decoration: InputDecoration(
+          contentPadding: decoration?.contentPadding ?? EdgeInsets.zero, // Use contentPadding from decoration
+        ),
+        child: GestureDetector(
+          onTap: state.enabled
+              ? () {
+            final newValue = !(field.value ?? false);
+            // state.requestFocus();
+            state.didChange(newValue);
+          }
+              : null,
+          child: Container(
+            color: Colors.transparent,
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Transform.scale(
+                    scale: 0.8,
+                    child: CustomCheckbox(
+                      value: (state.value == null && !tristate)
+                          ? false
+                          : state.value,
+                      onChanged: state.enabled
+                          ? (val) {
+                        // state.requestFocus();
+                        state.didChange(val);
                       }
-                    : null,
-                child: Container(
-                  color: Colors.transparent,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: Transform.scale(
-                          scale: 0.8,
-                          child: CustomCheckbox(
-                            value: (state.value == null && !tristate)
-                                ? false
-                                : state.value,
-                            onChanged: state.enabled
-                                ? (val) {
-                                    state.requestFocus();
-                                    state.didChange(val);
-                                  }
-                                : null,
-                            checkColor: checkColor,
-                            activeColor: activeColor,
-                            autofocus: autofocus,
-                            tristate: tristate,
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      label,
-                    ],
+                          : null,
+                      checkColor: checkColor,
+                      activeColor: activeColor,
+                      autofocus: autofocus,
+                      tristate: tristate,
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
-        );
+                SizedBox(
+                  width: 4,
+                ),
+                label,
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
 
   @override
   _CustomFormBuilderCheckboxState createState() =>

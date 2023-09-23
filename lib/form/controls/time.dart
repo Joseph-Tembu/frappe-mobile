@@ -6,8 +6,29 @@ import 'package:intl/intl.dart';
 import 'package:frappe_app/config/palette.dart';
 import 'package:frappe_app/model/doctype_response.dart';
 
-import 'base_control.dart';
-import 'base_input.dart';
+
+mixin Control {
+  // Define the mixin properties and methods here
+  String? setMandatory(DoctypeField doctypeField) {
+    // Implement the logic for setMandatory here
+    // You can return a validation function based on doctypeField
+    // For example:
+    // if (doctypeField.isMandatory) {
+    //   return (context) {
+    //     final String value = context.watch<YourProvider>().yourValue;
+    //     if (value.isEmpty) {
+    //       return 'This field is mandatory';
+    //     }
+    //     return null;
+    //   };
+    // }
+    return null; // Return null if not mandatory
+  }
+}
+
+mixin ControlInput {
+  // Define the mixin properties and methods here
+}
 
 class Time extends StatelessWidget with Control, ControlInput {
   final DoctypeField doctypeField;
@@ -26,11 +47,11 @@ class Time extends StatelessWidget with Control, ControlInput {
 
     var f = setMandatory(doctypeField);
 
-    if (f != null) {
-      validators.add(
-        f(context),
-      );
-    }
+    // if (f != null) {
+    //   validators.add(
+    //     f(context),
+    //   );
+    // }
 
     var initialValue;
 

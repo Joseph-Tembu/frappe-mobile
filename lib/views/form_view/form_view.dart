@@ -30,7 +30,7 @@ import 'package:frappe_app/widgets/collapsed_reviews.dart';
 import '../../model/doctype_response.dart';
 import '../../config/palette.dart';
 
-import '../../utils/helpers.dart';
+import '../../utils/help.dart';
 import '../../utils/frappe_alert.dart';
 import '../../utils/enums.dart';
 
@@ -71,14 +71,16 @@ class FormView extends StatelessWidget {
           : Builder(
               builder: (context) {
                 if (model.error != null) {
+
                   return handleError(
-                      error: model.error,
+                      error: model.error!,
                       context: context,
                       onRetry: () {
                         model.communicationOnly = true;
-
                         model.getData();
-                      });
+                      }
+                  );
+
                 }
 
                 var docs = model.formData.docs;
@@ -165,10 +167,15 @@ class FormView extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  Indicator.buildStatusButton(
-                                    model.meta.name,
-                                    status,
-                                  )
+
+                                  // Indicator.buildStatusButton(
+                                  //   model.meta.name,
+                                  //   status,
+                                  // )
+
+
+
+
                                 ],
                               ),
                             ),
@@ -458,19 +465,29 @@ class DocInfo extends StatelessWidget {
                         ),
                       )
                     : null,
+
+
                 onTap: () async {
                   showModalBottomSheet(
                     context: context,
                     useRootNavigator: true,
                     isScrollControlled: true,
+
                     builder: (context) => TagsBottomSheetView(
+                      key: UniqueKey(), // Use UniqueKey as a default key
+
                       tags: tags,
+
                       doctype: doctype,
                       name: name,
                       refreshCallback: refreshCallback,
                     ),
                   );
                 },
+
+
+
+
               ),
               DocInfoItem(
                 title: 'Shared',
@@ -485,18 +502,25 @@ class DocInfo extends StatelessWidget {
                       )
                     : null,
                 showBorder: false,
+
+
                 actionIcon: FrappeIcons.share,
                 onTap: () async {
                   bool refresh = await showModalBottomSheet(
                         context: context,
                         useRootNavigator: true,
                         isScrollControlled: true,
-                        builder: (context) => ShareBottomSheetView(
-                          shares: docInfo.shared,
-                          doctype: doctype,
-                          name: name,
-                        ),
+                        builder: (context) =>
+                            ShareBottomSheetView(
+                              key: UniqueKey(), // Add a key to the widget
+                              shares: docInfo.shared,
+                              doctype: doctype,
+                              name: name,
+                            )
+
                       ) ??
+
+
                       false;
 
                   if (refresh) {
@@ -533,17 +557,23 @@ class DocInfoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 60,
-      child: FlatButton(
+      child: TextButton(
         onPressed: onTap,
-        shape: showBorder
-            ? Border(
-                bottom: BorderSide(
-                  color: FrappePalette.grey[200]!,
-                  width: 2,
-                ),
-              )
-            : null,
-        padding: EdgeInsets.symmetric(vertical: 14),
+        style: TextButton.styleFrom(
+          shape: showBorder
+              ? RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(4),
+              bottomRight: Radius.circular(4),
+            ),
+            side: BorderSide(
+              color: FrappePalette.grey[200]!,
+              width: 2,
+            ),
+          )
+              : null,
+          padding: EdgeInsets.symmetric(vertical: 14),
+        ),
         child: Row(
           children: [
             Text(
@@ -554,7 +584,13 @@ class DocInfoItem extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
-            Spacer(),
+
+
+
+
+
+
+  Spacer(),
             filledWidget ??
                 Row(
                   children: [

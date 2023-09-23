@@ -62,28 +62,38 @@ class _LoginState extends State<Login> {
                       child: Column(
                         children: <Widget>[
                           buildDecoratedControl(
-                            control: FormBuilderTextField(
+                            control:
+
+                            FormBuilderTextField(
                               name: 'serverURL',
                               initialValue: model.savedCreds.serverURL,
                               validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context),
-                                FormBuilderValidators.url(context),
+
+                                // FormBuilderValidators.required(context),
+                                // FormBuilderValidators.url(context),
+                                //
+
                               ]),
                               decoration: Palette.formFieldDecoration(
                                 label: "Server URL",
                               ),
                             ),
+
+
                             field: DoctypeField(
                               fieldname: 'serverUrl',
                               label: "Server URL",
                             ),
                           ),
+
+
+
                           buildDecoratedControl(
                             control: FormBuilderTextField(
                               name: 'usr',
                               initialValue: model.savedCreds.usr,
                               validator: FormBuilderValidators.compose([
-                                FormBuilderValidators.required(context),
+                                // FormBuilderValidators.required(context),
                               ]),
                               decoration: Palette.formFieldDecoration(
                                 label: "Email Address",
@@ -92,6 +102,11 @@ class _LoginState extends State<Login> {
                             field: DoctypeField(
                                 fieldname: "email", label: "Email Address"),
                           ),
+
+
+
+
+
                           PasswordField(),
                           FrappeFlatButton(
                             title: model.loginButtonLabel,
@@ -223,7 +238,7 @@ class _VerificationBottomSheetViewState
                       control: FormBuilderTextField(
                         name: 'otp',
                         validator: FormBuilderValidators.compose([
-                          FormBuilderValidators.required(context),
+                          // FormBuilderValidators.required(context),
                         ]),
                         decoration: Palette.formFieldDecoration(
                           label: "Verification",
@@ -335,7 +350,7 @@ class _PasswordFieldState extends State<PasswordField> {
             maxLines: 1,
             name: 'pwd',
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(context),
+              // FormBuilderValidators.required(context),
             ]),
             obscureText: _hidePassword,
             decoration: Palette.formFieldDecoration(

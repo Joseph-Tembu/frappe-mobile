@@ -4,7 +4,7 @@ import 'package:frappe_app/config/frappe_palette.dart';
 import 'package:frappe_app/model/get_doc_response.dart';
 import 'package:frappe_app/utils/enums.dart';
 import 'package:frappe_app/utils/frappe_icon.dart';
-import 'package:frappe_app/utils/helpers.dart';
+import 'package:frappe_app/utils/help.dart';
 import 'package:frappe_app/views/send_email/send_email_view.dart';
 import 'package:frappe_app/widgets/doc_version.dart';
 import 'package:frappe_app/widgets/email_box.dart';
@@ -75,16 +75,20 @@ class Timeline extends StatelessWidget {
         children.add(
           Padding(
             padding: const EdgeInsets.only(left: 6.0),
-            child: FlatButton.icon(
-              color: FrappePalette.grey[600],
-              shape: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: Colors.transparent,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(6),
-                ),
-              ),
+            child:
+            TextButton
+                .icon(
+              // color: FrappePalette.grey[600],
+              // shape: OutlineInputBorder(
+              //   borderSide: BorderSide(
+              //     color: Colors.transparent,
+              //   ),
+              //   borderRadius: BorderRadius.all(
+              //     Radius.circular(6),
+              //   ),
+              // ),
+
+
               label: Text(
                 'New Email',
                 style: TextStyle(

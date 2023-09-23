@@ -6,13 +6,10 @@ import 'package:frappe_app/model/doctype_response.dart';
 import 'package:frappe_app/utils/enums.dart';
 import 'package:frappe_app/utils/frappe_icon.dart';
 import 'package:frappe_app/views/base_view.dart';
-
 import 'package:frappe_app/views/list_view/bottom_sheets/edit_filter_bottom_sheet_view.dart';
 import 'package:frappe_app/widgets/frappe_bottom_sheet.dart';
 import 'package:frappe_app/widgets/frappe_button.dart';
-
 import 'filters_bottom_sheet_viewmodel.dart';
-
 class FiltersBottomSheetView extends StatelessWidget {
   final List<DoctypeField> fields;
   final List<Filter> filters;
@@ -187,6 +184,7 @@ class AddFilter extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 4.0, bottom: 6.0),
                 child: Wrap(
                   children: [
+
                     GestureDetector(
                       onTap: () async {
                         Filter _filter = await showModalBottomSheet(
@@ -194,6 +192,8 @@ class AddFilter extends StatelessWidget {
                           context: context,
                           isScrollControlled: true,
                           builder: (context) => EditFilterBottomSheetView(
+                            key: UniqueKey(), // Provide a unique key here
+
                             page: 1,
                             fields: fields,
                             filter: filter,
@@ -204,6 +204,11 @@ class AddFilter extends StatelessWidget {
                           onUpdate(_filter);
                         }
                       },
+
+
+
+
+
                       child: Card(
                         child: Container(
                           decoration: BoxDecoration(
@@ -244,19 +249,25 @@ class AddFilter extends StatelessWidget {
                     SizedBox(
                       width: 10,
                     ),
-                    GestureDetector(
-                      onTap: () async {
-                        Filter _filter = await showModalBottomSheet(
-                          useRootNavigator: true,
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => EditFilterBottomSheetView(
-                            page: 2,
-                            filter: filter,
-                          ),
-                        );
+    GestureDetector(
+    onTap: () async {
+    Filter _filter = await showModalBottomSheet(
+    useRootNavigator: true,
+    context: context,
+    isScrollControlled: true,
+    builder: (context) => EditFilterBottomSheetView(
+      key: UniqueKey(), // Provide a unique key here
 
-                        if (_filter != null && _filter.filterOperator != null) {
+      page: 2,
+    filter: filter,
+    fields: [], // You should provide the appropriate value here
+    ),
+    );
+    // Rest of your code
+
+
+
+    if (_filter != null && _filter.filterOperator != null) {
                           onUpdate(_filter);
                         }
                       },
@@ -293,19 +304,24 @@ class AddFilter extends StatelessWidget {
                     SizedBox(
                       width: 10,
                     ),
-                    GestureDetector(
-                      onTap: () async {
-                        Filter _filter = await showModalBottomSheet(
-                          useRootNavigator: true,
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => EditFilterBottomSheetView(
-                            page: 3,
-                            filter: filter,
-                          ),
-                        );
+    GestureDetector(
+    onTap: () async {
+    Filter _filter = await showModalBottomSheet(
+    useRootNavigator: true,
+    context: context,
+    isScrollControlled: true,
+    builder: (context) => EditFilterBottomSheetView(
+      key: UniqueKey(), // Provide a unique key here
 
-                        if (_filter != null && _filter.value != null) {
+      page: 2,
+    filter: filter,
+    fields: [], // You should provide the appropriate value here
+    ),
+    );
+    // Rest of your code
+
+
+    if (_filter != null && _filter.value != null) {
                           onUpdate(_filter);
                         }
                       },

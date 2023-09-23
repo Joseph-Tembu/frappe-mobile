@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:frappe_app/config/frappe_icons.dart';
 import 'package:frappe_app/config/palette.dart';
 import 'package:frappe_app/model/common.dart';
 import 'package:frappe_app/utils/frappe_icon.dart';
 import 'package:frappe_app/widgets/form_builder_typeahead.dart';
-
 import '../../model/doctype_response.dart';
-
 import 'base_control.dart';
 import 'base_input.dart';
+mixin Control {
+  // Define the mixin properties and methods here
 
+  Function(BuildContext) setMandatory(DoctypeField doctypeField) {
+    // Implement your logic for setMandatory here
+    // This method should return a function that takes a BuildContext as an argument
+    // and returns a String? (or null) as per your code.
+    // You need to replace this comment with your actual implementation.
+    return (BuildContext context) {
+      // Your implementation logic here
+      return null; // Replace this with the actual validation result
+    };
+  }
+}
+
+// mixin Control {
+//   // Define the mixin properties and methods here
+// }
+
+mixin ControlInput {
+  // Define the mixin properties and methods here
+}
 typedef String SelectionToTextTransformer<T>(T selection);
 
 class AutoComplete extends StatefulWidget {
@@ -50,6 +66,7 @@ class AutoComplete extends StatefulWidget {
 }
 
 class _AutoCompleteState extends State<AutoComplete>
+
     with Control, ControlInput {
   TextEditingController? _typeAheadController;
 
@@ -87,6 +104,10 @@ class _AutoCompleteState extends State<AutoComplete>
             );
           }
         },
+
+
+
+
         direction: AxisDirection.up,
         validator: FormBuilderValidators.compose(validators),
         decoration: widget.inputDecoration ??

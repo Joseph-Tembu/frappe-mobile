@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:frappe_app/config/frappe_icons.dart';
@@ -11,8 +10,8 @@ import 'package:frappe_app/utils/constants.dart';
 import 'package:frappe_app/utils/frappe_icon.dart';
 import 'package:frappe_app/views/base_view.dart';
 import 'package:frappe_app/views/list_view/bottom_sheets/edit_filter_bottom_sheet_viewmodel.dart';
-
 import 'package:frappe_app/widgets/frappe_bottom_sheet.dart';
+import 'package:flutter/material.dart';
 
 class EditFilterBottomSheetView extends StatelessWidget {
   final int page;
@@ -20,10 +19,10 @@ class EditFilterBottomSheetView extends StatelessWidget {
   final Filter filter;
 
   const EditFilterBottomSheetView({
-    @required this.page,
-    this.fields,
-    this.filter,
-    Key key,
+    required this.page,
+    required this.fields,
+    required this.filter,
+    required Key key,
   }) : super(key: key);
 
   @override
@@ -34,14 +33,14 @@ class EditFilterBottomSheetView extends StatelessWidget {
         model.filter = filter;
       },
       builder: (context, model, child) {
-        Widget widget;
+        late Widget widget; // Use the 'late' modifier here
         if (model.pageNumber == 1) {
           widget = SelectFilterField(
             fields: fields,
             model: model,
             onActionButtonPress: () {
               model.moveToPage(2);
-            },
+            }, leadingOnPressed: null,
           );
         } else if (model.pageNumber == 2) {
           widget = SelectFilterOperator(
@@ -73,17 +72,19 @@ class EditFilterBottomSheetView extends StatelessWidget {
   }
 }
 
+
+
 class SelectFilterField extends StatelessWidget {
   final Function onActionButtonPress;
-  final Function leadingOnPressed;
+  final Function? leadingOnPressed; // Make leadingOnPressed optional
   final List<DoctypeField> fields;
   final EditFilterBottomSheetViewModel model;
 
   SelectFilterField({
-    this.onActionButtonPress,
-    this.leadingOnPressed,
-    @required this.fields,
-    @required this.model,
+    required this.onActionButtonPress,
+    required this.leadingOnPressed,
+    required this.fields,
+    required this.model,
   });
 
   @override
@@ -114,11 +115,16 @@ class SelectFilterField extends StatelessWidget {
               model.updateFieldName(field);
             },
             visualDensity: VisualDensity(vertical: -4),
-            title: Text(
-              field.label,
+            title:
+
+            Text(
+              field.label ?? "", // Provide an empty string as a default value
               style: TextStyle(
                 color: FrappePalette.grey[700],
               ),
+
+
+
             ),
             trailing: FrappeIcon(
               FrappeIcons.arrow_right,
@@ -131,19 +137,26 @@ class SelectFilterField extends StatelessWidget {
   }
 }
 
+
+
+
+
+
 class SelectFilterOperator extends StatelessWidget {
   final Function onActionButtonPress;
-  final Function leadingOnPressed;
+  final Function? leadingOnPressed; // Make leadingOnPressed optional
   final EditFilterBottomSheetViewModel model;
 
   SelectFilterOperator({
-    this.onActionButtonPress,
-    this.leadingOnPressed,
-    this.model,
+    required this.onActionButtonPress,
+    required this.leadingOnPressed,
+    required this.model,
   });
 
   @override
   Widget build(BuildContext context) {
+
+
     return FrappeBottomSheet(
       trailing: Text(
         model.filter.isInit ? 'Next' : 'Done',
@@ -151,7 +164,10 @@ class SelectFilterOperator extends StatelessWidget {
           color: FrappePalette.blue[500],
         ),
       ),
-      leadingOnPressed: model.filter.isInit ? leadingOnPressed : null,
+      leadingOnPressed: model.filter.isInit ? () {
+        // Handle leading onPressed action here
+      } : null,
+
       leadingText: model.filter.isInit ? "Back" : null,
       onActionButtonPress: () {
         if (model.filter.isInit) {
@@ -160,6 +176,10 @@ class SelectFilterOperator extends StatelessWidget {
           Navigator.of(context).pop(model.filter);
         }
       },
+
+
+
+
       title: 'Choose filter operator',
       body: ListView(
           children: Constants.filterOperators.where((opt) {
@@ -214,14 +234,22 @@ class EditValue extends StatefulWidget {
   final EditFilterBottomSheetViewModel model;
 
   EditValue({
-    this.onActionButtonPress,
-    this.leadingOnPressed,
-    this.model,
+    required this.onActionButtonPress,
+    required this.leadingOnPressed,
+    required this.model,
   });
 
   @override
   _EditValueState createState() => _EditValueState();
 }
+
+
+
+
+
+
+
+
 
 class _EditValueState extends State<EditValue> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
@@ -231,19 +259,32 @@ class _EditValueState extends State<EditValue> {
       title: 'Edit Value',
       leadingText: widget.model.filter.isInit ? 'Back' : null,
       leadingOnPressed:
-          widget.model.filter.isInit ? widget.leadingOnPressed : null,
+      widget.model.filter.isInit ? widget.leadingOnPressed as void Function()? : null,
+
+
+
+
+
       trailing: Text(
         'Done',
         style: TextStyle(
           color: FrappePalette.blue[500],
         ),
       ),
+
+
       onActionButtonPress: () {
-        _fbKey.currentState.save();
-        var v = _fbKey.currentState.value[widget.model.filter.field.fieldname];
-        widget.model.updateValue(v);
-        widget.onActionButtonPress(widget.model.filter);
+        if (_fbKey.currentState != null) {
+          _fbKey.currentState?.save();
+          var v = _fbKey.currentState?.value[widget.model.filter.field.fieldname];
+          widget.model.updateValue(v);
+          widget.onActionButtonPress(widget.model.filter);
+        } else {
+          // Handle the case where _fbKey.currentState is null, if needed.
+        }
       },
+
+
       body: Column(
         children: [
           FormBuilder(
@@ -251,11 +292,18 @@ class _EditValueState extends State<EditValue> {
             child: Builder(builder: (context) {
               if (widget.model.filter.field.fieldtype == "Check") {
                 widget.model.filter.field.options = ["Yes", "No"];
-                return Select(
-                  doctypeField: widget.model.filter.field,
-                  doc: {
-                    "${widget.model.filter.field.fieldname}":
-                        widget.model.filter.value
+                return DropdownButton(
+                  value: widget.model.filter.value,
+                  items: widget.model.filter.field.options.map((String option) {
+                    return DropdownMenuItem(
+                      value: option,
+                      child: Text(option),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      widget.model.filter.value = newValue;
+                    });
                   },
                 );
               } else {
@@ -266,6 +314,7 @@ class _EditValueState extends State<EditValue> {
                   },
                 );
               }
+
             }),
           )
         ],

@@ -1,22 +1,19 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html_v3/custom_render.dart';
 import 'package:frappe_app/config/frappe_icons.dart';
 import 'package:frappe_app/config/frappe_palette.dart';
 import 'package:frappe_app/model/get_doc_response.dart';
-import 'package:frappe_app/utils/dio_helper.dart';
+import 'package:frappe_app/utils/dio_help.dart';
 import 'package:frappe_app/utils/frappe_icon.dart';
-import 'package:frappe_app/utils/helpers.dart';
+import 'package:frappe_app/utils/help.dart';
 import 'package:frappe_app/views/login/login_view.dart';
 import 'package:open_file/open_file.dart';
-
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
-
 import '../model/config.dart';
-
 import '../widgets/user_avatar.dart';
 import 'package:photo_view/photo_view.dart';
 
@@ -256,6 +253,8 @@ class _EmailBoxState extends State<EmailBox> {
                         ),
                       );
                     },
+
+
                     child: Container(
                       color: Colors.white,
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -297,6 +296,7 @@ class _EmailBoxState extends State<EmailBox> {
                             }
                           },
                         },
+
                         customImageRenders: {
                           networkSourceMatcher(domains: [
                             Config().baseUrl!,
@@ -304,6 +304,11 @@ class _EmailBoxState extends State<EmailBox> {
                             headers: {
                               HttpHeaders.cookieHeader: DioHelper.cookies!,
                             },
+
+
+
+
+
                             altWidget: (alt) => Text(alt ?? ""),
                             loadingWidget: () => Text("Loading..."),
                           ),
@@ -321,6 +326,9 @@ class _EmailBoxState extends State<EmailBox> {
                           networkSourceMatcher(): networkImageRender(
                               altWidget: (_) => FrappeLogo()),
                         },
+
+
+
                         onLinkTap: (url, _, __, ___) async {
                           print("Opening $url...");
                           if (url != null) {
@@ -336,7 +344,13 @@ class _EmailBoxState extends State<EmailBox> {
                             }
                           }
                         },
+
+
+
+
                       ),
+
+
                     ),
                   ),
                 )
@@ -348,3 +362,6 @@ class _EmailBoxState extends State<EmailBox> {
     );
   }
 }
+//////////////////////////////////////////////////////////
+
+

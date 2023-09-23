@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../config/palette.dart';
 import '../utils/enums.dart';
 import '../utils/frappe_icon.dart';
-
 class FrappeFlatButton extends StatelessWidget {
   final void Function()? onPressed;
   final String title;
@@ -56,49 +55,159 @@ class FrappeFlatButton extends StatelessWidget {
       return ButtonTheme(
         height: height,
         minWidth: fullWidth ? double.infinity : minWidth,
-        child: FlatButton.icon(
+        child: TextButton.icon(
           label: Text(
             title,
             style: _textStyle,
           ),
           icon: FrappeIcon(icon!),
           onPressed: onPressed,
-          shape: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.transparent,
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
             ),
-            borderRadius: BorderRadius.all(
-              Radius.circular(6),
-            ),
+            backgroundColor: MaterialStateProperty.all(_buttonColor),
+            overlayColor: MaterialStateProperty.all(_buttonColor), // for disabled state
           ),
-          color: _buttonColor,
-          disabledColor: _buttonColor,
         ),
       );
     } else {
       return ButtonTheme(
         height: height,
         minWidth: fullWidth ? double.infinity : minWidth,
-        child: FlatButton(
-            onPressed: onPressed,
-            shape: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.transparent,
-              ),
-              borderRadius: BorderRadius.all(
-                Radius.circular(6),
+        child: TextButton(
+          onPressed: onPressed,
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
               ),
             ),
-            color: _buttonColor,
-            disabledColor: _buttonColor,
-            child: Text(
-              title,
-              style: _textStyle,
-            )),
+            backgroundColor: MaterialStateProperty.all(_buttonColor),
+            overlayColor: MaterialStateProperty.all(_buttonColor), // for disabled state
+          ),
+          child: Text(
+            title,
+            style: _textStyle,
+          ),
+        ),
       );
     }
   }
 }
+
+// ... (other classes remain unchanged)
+
+//
+// class FrappeFlatButton extends StatelessWidget {
+//   final void Function()? onPressed;
+//   final String title;
+//   final ButtonType buttonType;
+//   final String? icon;
+//   final double height;
+//   final double minWidth;
+//   final bool fullWidth;
+//
+//   FrappeFlatButton({
+//     required this.onPressed,
+//     required this.buttonType,
+//     required this.title,
+//     this.icon,
+//     this.height = 36.0,
+//     this.minWidth = 88,
+//     this.fullWidth = false,
+//   });
+//
+//   FrappeFlatButton.small({
+//     required this.onPressed,
+//     required this.buttonType,
+//     required this.title,
+//     this.icon,
+//     this.height = 32.0,
+//     this.minWidth = 88,
+//     this.fullWidth = false,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     late Color _buttonColor;
+//     late TextStyle _textStyle;
+//
+//     if (onPressed == null) {
+//       _buttonColor = Palette.disabledButonColor;
+//       _textStyle =
+//           TextStyle(color: Colors.white, fontSize: fullWidth ? 18 : null);
+//     } else if (buttonType == ButtonType.primary) {
+//       _buttonColor = Palette.primaryButtonColor;
+//       _textStyle =
+//           TextStyle(color: Colors.white, fontSize: fullWidth ? 18 : null);
+//     } else {
+//       _buttonColor = Palette.secondaryButtonColor;
+//       _textStyle =
+//           TextStyle(color: Colors.black, fontSize: fullWidth ? 18 : null);
+//     }
+//
+//     if (icon != null) {
+//       return ButtonTheme(
+//         height: height,
+//         minWidth: fullWidth ? double.infinity : minWidth,
+//         child:
+//
+//         TextButton.icon(
+//           label: Text(
+//             title,
+//             style: _textStyle,
+//           ),
+//           icon: FrappeIcon(icon!),
+//           onPressed: onPressed,
+//           style: ButtonStyle(
+//             shape: MaterialStateProperty.all(
+//               RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(6),
+//               ),
+//             ),
+//             backgroundColor: MaterialStateProperty.all(_buttonColor),
+//             overlayColor: MaterialStateProperty.all(_buttonColor), // for disabled state
+//           ),
+//         )
+//
+//
+//
+//       );
+//     } else {
+//       return ButtonTheme(
+//         height: height,
+//         minWidth: fullWidth ? double.infinity : minWidth,
+//         child:
+//
+//         FlatButton(
+//           onPressed: onPressed,
+//           shape: OutlineInputBorder(
+//             borderSide: BorderSide(
+//               color: Colors.transparent,
+//             ),
+//             borderRadius: BorderRadius.all(
+//               Radius.circular(6),
+//             ),
+//           ),
+//           color: _buttonColor,
+//           disabledColor: _buttonColor,
+//           child: Text(
+//             title,
+//             style: _textStyle,
+//           ),
+//         )
+//
+//
+//
+//
+//
+//       );
+//     }
+//   }
+// }
 
 class FrappeRaisedButton extends StatelessWidget {
   final void Function()? onPressed;
@@ -150,31 +259,42 @@ class FrappeRaisedButton extends StatelessWidget {
       return ButtonTheme(
         height: height,
         minWidth: fullWidth ? double.infinity : minWidth,
-        child: RaisedButton.icon(
-          color: color,
-          label: tWidget,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
+        child:
+
+        ElevatedButton.icon(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            primary: color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6.0),
+            ),
           ),
           icon: FrappeIcon(
             icon!,
             size: iconSize,
           ),
-          onPressed: onPressed,
+          label: tWidget,
         ),
+
+
       );
     } else {
       return ButtonTheme(
         height: height,
         minWidth: fullWidth ? double.infinity : minWidth,
-        child: RaisedButton(
-          color: color,
-          onPressed: onPressed,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.0),
+        child:
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: color, // Set the button's background color
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6.0),
+            ),
           ),
+          onPressed: onPressed,
           child: tWidget,
         ),
+
+
       );
     }
   }

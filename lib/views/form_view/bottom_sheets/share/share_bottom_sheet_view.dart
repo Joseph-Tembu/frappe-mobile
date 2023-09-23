@@ -1,4 +1,3 @@
-// @dart=2.9
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -12,7 +11,6 @@ import 'package:frappe_app/model/offline_storage.dart';
 import 'package:frappe_app/services/api/api.dart';
 import 'package:frappe_app/utils/frappe_icon.dart';
 import 'package:frappe_app/views/base_view.dart';
-
 import 'package:frappe_app/views/form_view/bottom_sheets/share/share_bottom_sheet_viewmodel.dart';
 import 'package:frappe_app/widgets/frappe_bottom_sheet.dart';
 import 'package:frappe_app/widgets/user_avatar.dart';
@@ -23,10 +21,10 @@ class ShareBottomSheetView extends StatelessWidget {
   final List<Shared> shares;
 
   const ShareBottomSheetView({
-    Key key,
-    @required this.doctype,
-    @required this.name,
-    @required this.shares,
+    required Key key,
+    required this.doctype,
+    required this.name,
+    required this.shares,
   }) : super(key: key);
 
   @override
@@ -49,7 +47,7 @@ class ShareBottomSheetView extends StatelessWidget {
                     color: Colors.white,
                     border: Border(
                       top: BorderSide(
-                        color: FrappePalette.grey[200],
+                        // color: FrappePalette.grey[200],
                       ),
                     ),
                   ),
@@ -179,8 +177,8 @@ class ShareBottomSheetView extends StatelessWidget {
   }
 
   List<Widget> _generateChildren({
-    @required ShareBottomSheetViewModel model,
-    BuildContext context,
+    required ShareBottomSheetViewModel model,
+    required BuildContext context,
   }) {
     var allUsers = OfflineStorage.getItem('allUsers');
     allUsers = allUsers["data"];
@@ -188,6 +186,7 @@ class ShareBottomSheetView extends StatelessWidget {
       return model.currentShares.map((share) {
         var user = allUsers[share.user];
         return SharedWithUser(
+          key: UniqueKey(),
           share: share,
           user: user,
           model: model,
@@ -209,18 +208,18 @@ class SharedWithUser extends StatelessWidget {
   final String name;
 
   const SharedWithUser({
-    Key key,
-    this.user,
-    this.share,
-    this.model,
-    this.doctype,
-    this.name,
+    required Key key,
+    required this.user,
+    required this.share,
+    required this.model,
+    required this.doctype,
+    required this.name,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String title;
-    String subtitle;
+    String? title;
+    String? subtitle;
     String userPermission;
 
     if (user != null) {

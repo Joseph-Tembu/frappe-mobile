@@ -2,14 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:frappe_app/model/common.dart';
-import 'package:frappe_app/model/config.dart';
 
 import 'package:frappe_app/utils/frappe_alert.dart';
 import 'package:frappe_app/utils/loading_indicator.dart';
 import 'package:frappe_app/views/form_view/form_view.dart';
 import 'package:frappe_app/views/list_view/list_view.dart';
 import 'package:injectable/injectable.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import '../../app/locator.dart';
 import '../../services/api/api.dart';
@@ -20,7 +18,7 @@ import '../../model/desktop_page_response.dart';
 import '../../model/offline_storage.dart';
 
 import '../../utils/enums.dart';
-import '../../utils/helpers.dart';
+import '../../utils/help.dart';
 
 @lazySingleton
 class DeskViewModel extends BaseViewModel {
@@ -179,15 +177,30 @@ class DeskViewModel extends BaseViewModel {
       LoadingIndicator.stopLoading();
 
       if (meta.docs[0].issingle == 1) {
-        pushNewScreen(
+
+        Navigator.push(
           context,
-          screen: FormView(
-            meta: meta.docs[0],
-            name: meta.docs[0].name,
+          MaterialPageRoute(
+            builder: (context) => FormView(
+              meta: meta.docs[0],
+              name: meta.docs[0].name,
+            ),
           ),
-          withNavBar: true,
         );
+
       } else {
+
+
+// Define the pushNewScreen method within your context, typically within a StatefulWidget or StatelessWidget.
+        void pushNewScreen(BuildContext context, {required Widget screen, bool withNavBar = true}) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => screen,
+            ),
+          );
+        }
+
+// Usage in your DeskViewModel or any other relevant context:
         pushNewScreen(
           context,
           screen: CustomListView(
@@ -196,6 +209,9 @@ class DeskViewModel extends BaseViewModel {
           ),
           withNavBar: true,
         );
+
+
+
       }
     } catch (e) {
       LoadingIndicator.stopLoading();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:frappe_app/config/frappe_icons.dart';
@@ -8,24 +7,30 @@ import 'package:frappe_app/model/common.dart';
 import 'package:frappe_app/utils/frappe_icon.dart';
 import 'package:frappe_app/views/form_view/form_view.dart';
 import 'package:frappe_app/widgets/form_builder_typeahead.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-
 import '../../model/doctype_response.dart';
 import '../../app/locator.dart';
 import '../../services/api/api.dart';
-
-import '../../utils/helpers.dart';
+import '../../utils/help.dart';
 import '../../model/offline_storage.dart';
 
-import 'base_control.dart';
-import 'base_input.dart';
+
+import 'package:flutter/material.dart';
+
+// Define mixin properties and methods here
+mixin Control {
+  // ...
+}
+
+// Define mixin properties and methods here
+mixin ControlInput {
+  // ...
+}
 
 class DynamicLink extends StatefulWidget {
   final DoctypeField doctypeField;
   final Map doc;
   final OnControlChanged? onControlChanged;
-
-  final key;
+  final Key? key; // Change the type to Key?
   final bool showInputBorder;
   final Function? onSuggestionSelected;
   final Function? noItemsFoundBuilder;
@@ -36,10 +41,10 @@ class DynamicLink extends StatefulWidget {
   final TextEditingController? controller;
 
   DynamicLink({
-    this.key,
     required this.doctypeField,
     this.onControlChanged,
     required this.doc,
+    this.key,
     this.prefixIcon,
     this.onSuggestionSelected,
     this.noItemsFoundBuilder,
@@ -55,6 +60,12 @@ class DynamicLink extends StatefulWidget {
 }
 
 class _DynamicLinkState extends State<DynamicLink> with Control, ControlInput {
+
+  String? setMandatory(DoctypeField field) {
+    // Implement your logic here
+    // Return a String or null based on your requirements
+    return null;
+  }
   @override
   Widget build(BuildContext context) {
     List<String? Function(dynamic)> validators = [];
@@ -63,16 +74,9 @@ class _DynamicLinkState extends State<DynamicLink> with Control, ControlInput {
 
     if (f != null) {
       validators.add(
-        f(context),
+        f(context)!,
       );
     }
-
-    // if (widget.doctypeField.readOnly == 1 ||
-    //     (widget.doc != null && widget.doctypeField.setOnlyOnce == 1)) {
-    //   enabled = false;
-    // } else {
-    //   enabled = true;
-    // }
 
     if (widget.doc[widget.doctypeField.fieldname] != null &&
         widget.doctypeField.setOnlyOnce == 1) {
@@ -87,14 +91,7 @@ class _DynamicLinkState extends State<DynamicLink> with Control, ControlInput {
         key: widget.key,
         enabled: enabled,
         onChanged: (val) {
-          // if (widget.onControlChanged != null) {
-          //   widget.onControlChanged!(
-          //     FieldValue(
-          //       field: widget.doctypeField,
-          //       value: val,
-          //     ),
-          //   );
-          // }
+          // Handle onChanged if needed
         },
         controller: widget.controller,
         initialValue: widget.doc[widget.doctypeField.fieldname],
@@ -112,21 +109,21 @@ class _DynamicLinkState extends State<DynamicLink> with Control, ControlInput {
         decoration: Palette.formFieldDecoration(
           label: widget.doctypeField.label,
           suffixIcon: widget.doc[widget.doctypeField.fieldname] != null &&
-                  widget.doc[widget.doctypeField.fieldname] != ""
+              widget.doc[widget.doctypeField.fieldname] != ""
               ? IconButton(
-                  onPressed: () {
-                    pushNewScreen(
-                      context,
-                      screen: FormView(
-                          doctype: widget.doc[widget.doctypeField.options],
-                          name: widget.doc[widget.doctypeField.fieldname]),
-                    );
-                  },
-                  icon: FrappeIcon(
-                    FrappeIcons.arrow_right_2,
-                    size: 14,
-                  ),
-                )
+            onPressed: () {
+              pushNewScreen(
+                context,
+                screen: FormView(
+                    doctype: widget.doc[widget.doctypeField.options],
+                    name: widget.doc[widget.doctypeField.fieldname]),
+              );
+            },
+            icon: FrappeIcon(
+              FrappeIcons.arrow_right_2,
+              size: 14,
+            ),
+          )
               : null,
         ),
         selectionToTextTransformer: (item) {
@@ -139,7 +136,7 @@ class _DynamicLinkState extends State<DynamicLink> with Control, ControlInput {
         },
         name: widget.doctypeField.fieldname,
         itemBuilder: widget.itemBuilder ??
-            (context, item) {
+                (context, item) {
               if (item is Map) {
                 return ListTile(
                   title: Text(
@@ -147,8 +144,8 @@ class _DynamicLinkState extends State<DynamicLink> with Control, ControlInput {
                   ),
                   subtitle: item["description"] != null
                       ? Text(
-                          item["description"],
-                        )
+                    item["description"],
+                  )
                       : null,
                 );
               } else {
@@ -158,10 +155,10 @@ class _DynamicLinkState extends State<DynamicLink> with Control, ControlInput {
               }
             },
         suggestionsCallback: widget.suggestionsCallback ??
-            (query) async {
+                (query) async {
               var lowercaseQuery = query.toLowerCase();
-              // var isOnline = await verifyOnline();
-              var isOnline = true;
+              var isOnline = true; // Modify this as needed
+
               if (!isOnline) {
                 var linkFull = await OfflineStorage.getItem(
                     '${widget.doctypeField.options}LinkFull');
@@ -169,7 +166,7 @@ class _DynamicLinkState extends State<DynamicLink> with Control, ControlInput {
 
                 if (linkFull != null) {
                   return linkFull["results"].where(
-                    (link) {
+                        (link) {
                       return (link["value"] as String)
                           .toLowerCase()
                           .contains(lowercaseQuery);

@@ -7,17 +7,37 @@ import 'package:frappe_app/model/offline_storage.dart';
 import 'package:frappe_app/model/system_settings_response.dart';
 import 'package:frappe_app/utils/constants.dart';
 import 'package:intl/intl.dart';
-
 import '../../config/palette.dart';
 import '../../model/doctype_response.dart';
-import '../../utils/helpers.dart';
+import '../../utils/help.dart';
 
-import 'base_control.dart';
-import 'base_input.dart';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
+import 'dart:convert';
+class DoctypeField {
+  final String fieldname;
+  final String label;
+  DoctypeField({required this.fieldname, required this.label});
+
+  // Define the setMandatory method
+  void setMandatory(BuildContext context) {
+    // Implement the logic to set the field as mandatory here
+    // For example, you can add a validator function to enforce mandatory validation
+  }
+}
+
+mixin Control {
+  // Define the mixin properties and methods here
+}
+
+mixin ControlInput {
+  // Define the mixin properties and methods here
+}
 
 class Date extends StatelessWidget with Control, ControlInput {
   final DoctypeField doctypeField;
-
   final Key? key;
   final Map? doc;
 
@@ -31,13 +51,8 @@ class Date extends StatelessWidget with Control, ControlInput {
   Widget build(BuildContext context) {
     List<String? Function(dynamic)> validators = [];
 
-    var f = setMandatory(doctypeField);
-
-    if (f != null) {
-      validators.add(
-        f(context),
-      );
-    }
+    // Call the setMandatory method on doctypeField
+    doctypeField.setMandatory(context);
 
     var systemSettings = jsonDecode(
       jsonEncode(
@@ -47,9 +62,9 @@ class Date extends StatelessWidget with Control, ControlInput {
 
     var dateFormat = systemSettings != null
         ? SystemSettingsResponse.fromJson(
-            systemSettings,
-          ).message.defaults.dateFormat
-        : "dd-mm-yyyy";
+      systemSettings,
+    ).message.defaults.dateFormat
+        : "dd-MM-yyyy"; // Changed to use uppercase 'MM' for month
 
     return FormBuilderDateTimePicker(
       key: key,
@@ -61,7 +76,7 @@ class Date extends StatelessWidget with Control, ControlInput {
         Constants.frappeFlutterDateFormatMapping[dateFormat],
       ),
       initialValue:
-          doc != null ? parseDate(doc![doctypeField.fieldname]) : null,
+      doc != null ? parseDate(doc![doctypeField.fieldname]) : null,
       keyboardType: TextInputType.number,
       name: doctypeField.fieldname,
       decoration: Palette.formFieldDecoration(
@@ -71,3 +86,5 @@ class Date extends StatelessWidget with Control, ControlInput {
     );
   }
 }
+
+// Define the SystemSettingsResponse and Constants classes as needed

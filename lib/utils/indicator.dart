@@ -1,10 +1,9 @@
-// @dart=2.9
 
 import 'package:flutter/material.dart';
 import 'package:frappe_app/config/palette.dart';
 
 class Indicator {
-  static Widget buildStatusButton(String doctype, String status) {
+  static Widget? buildStatusButton(String doctype, String status) {
     var doctypeColor = {
       'Issue': {
         'Open': indicateDanger(status),
@@ -12,16 +11,25 @@ class Indicator {
       }
     };
 
-    if (doctypeColor[doctype] != null &&
-        doctypeColor[doctype][status] != null) {
-      return doctypeColor[doctype][status];
-    } else if (["Pending", "Review", "Medium", "Not Approved"]
+    if (doctypeColor[doctype] != null && doctypeColor[doctype]![status] != null) {
+
+      return doctypeColor[doctype]![status]!;
+
+    }
+
+    else if (["Pending", "Review", "Medium", "Not Approved"]
         .contains(status)) {
       return indicateWarning(status);
     } else if (["Open", "Urgent", "High", "Failed", "Rejected", "Error"]
         .contains(status)) {
       return indicateDanger(status);
-    } else if ([
+    }
+
+
+
+
+
+    else if ([
       "Closed",
       "Finished",
       "Converted",

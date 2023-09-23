@@ -1,15 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:frappe_app/config/palette.dart';
-import 'package:frappe_app/model/doctype_response.dart';
 
-import 'base_input.dart';
-import 'base_control.dart';
+class DoctypeField {
+  final String fieldname;
+  final String label;
+  final bool mandatory;
+
+  DoctypeField({
+    required this.fieldname,
+    required this.label,
+    this.mandatory = false,
+  });
+}
+
+class Palette {
+  static InputDecoration formFieldDecoration({required String label}) {
+    return InputDecoration(labelText: label);
+  }
+}
+
+mixin Control {
+  // Define the mixin properties and methods here
+
+  Function(BuildContext) setMandatory(DoctypeField doctypeField) {
+    if (doctypeField.mandatory) {
+      return (BuildContext context) {
+        return FormBuilderValidators.required;
+      };
+    }
+    return (BuildContext context) => null;
+  }
+}
+
+mixin ControlInput {
+  // Define the mixin properties and methods here
+}
 
 class ReadOnly extends StatelessWidget with Control, ControlInput {
   final DoctypeField doctypeField;
-
   final Key? key;
   final Map? doc;
 

@@ -5,8 +5,24 @@ import 'package:frappe_app/widgets/form_builder_text_editor.dart';
 
 import '../../model/doctype_response.dart';
 
-import 'base_control.dart';
-import 'base_input.dart';
+
+import 'package:flutter/material.dart';
+
+// Define the DoctypeField class for illustration purposes
+class DoctypeField {
+  final String fieldname;
+  final bool isMandatory;
+
+  DoctypeField({required this.fieldname, this.isMandatory = false});
+}
+
+mixin Control {
+  // Define the mixin properties and methods here
+}
+
+mixin ControlInput {
+  // Define the mixin properties and methods here
+}
 
 class TextEditor extends StatelessWidget with Control, ControlInput {
   final DoctypeField doctypeField;
@@ -27,12 +43,13 @@ class TextEditor extends StatelessWidget with Control, ControlInput {
   Widget build(BuildContext context) {
     List<String? Function(dynamic)> validators = [];
 
-    var f = setMandatory(doctypeField);
-
-    if (f != null) {
-      validators.add(
-        f(context),
-      );
+    if (doctypeField.isMandatory) {
+      validators.add((value) {
+        if (value == null || value.toString().isEmpty) {
+          return 'This field is mandatory';
+        }
+        return null;
+      });
     }
 
     return FormBuilderTextEditor(

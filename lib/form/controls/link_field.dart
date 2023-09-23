@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:frappe_app/config/frappe_icons.dart';
@@ -8,18 +7,23 @@ import 'package:frappe_app/model/common.dart';
 import 'package:frappe_app/utils/frappe_icon.dart';
 import 'package:frappe_app/views/form_view/form_view.dart';
 import 'package:frappe_app/widgets/form_builder_typeahead.dart';
-import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import '../../model/doctype_response.dart';
 import '../../app/locator.dart';
 import '../../services/api/api.dart';
 
-import '../../utils/helpers.dart';
+import '../../utils/help.dart';
 import '../../model/offline_storage.dart';
 
 import 'base_control.dart';
 import 'base_input.dart';
+mixin Control {
+  // Define the mixin properties and methods here
+}
 
+mixin ControlInput {
+  // Define the mixin properties and methods here
+}
 class LinkField extends StatefulWidget {
   final DoctypeField doctypeField;
   final Map? doc;
@@ -82,6 +86,8 @@ class _LinkFieldState extends State<LinkField> with Control, ControlInput {
 
     return Theme(
       data: Theme.of(context).copyWith(primaryColor: Colors.black),
+
+
       child: FormBuilderTypeAhead(
         key: widget.key,
         enabled: enabled,
@@ -108,6 +114,11 @@ class _LinkFieldState extends State<LinkField> with Control, ControlInput {
             );
           }
         },
+
+
+
+
+
         validator: FormBuilderValidators.compose(validators),
         decoration: Palette.formFieldDecoration(
           label: widget.doctypeField.label,

@@ -12,6 +12,8 @@ import '../model/config.dart';
 
 import '../services/api/api.dart';
 
+import 'package:flutter/material.dart'; // Import the material.dart package
+
 class CommentBox extends StatelessWidget {
   final Comment data;
   final Function callback;
@@ -55,39 +57,39 @@ class CommentBox extends StatelessWidget {
               subtitle: Text("commented $time"),
               trailing: Config().userId == data.owner
                   ? IconButton(
-                      padding: EdgeInsets.zero,
-                      icon: FrappeIcon(
-                        FrappeIcons.close_alt,
-                        size: 16,
-                      ),
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text('Are you sure'),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text('Yes'),
-                                  onPressed: () async {
-                                    Navigator.of(context).pop();
-                                    await locator<Api>()
-                                        .deleteComment(data.name);
-                                    callback();
-                                  },
-                                ),
-                                FlatButton(
-                                  child: Text('No'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                )
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    )
+                padding: EdgeInsets.zero,
+                icon: FrappeIcon(
+                  FrappeIcons.close_alt,
+                  size: 16,
+                ),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Are you sure'),
+                        actions: <Widget>[
+                          TextButton( // Use TextButton instead of FlatButton
+                            child: Text('Yes'),
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              await locator<Api>()
+                                  .deleteComment(data.name);
+                              callback();
+                            },
+                          ),
+                          TextButton( // Use TextButton instead of FlatButton
+                            child: Text('No'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
+                      );
+                    },
+                  );
+                },
+              )
                   : null,
             ),
             Padding(

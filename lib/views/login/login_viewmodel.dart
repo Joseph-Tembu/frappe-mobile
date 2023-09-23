@@ -1,18 +1,15 @@
 import 'package:frappe_app/model/login_request.dart';
 import 'package:frappe_app/model/login_response.dart';
-import 'package:frappe_app/utils/dio_helper.dart';
+import 'package:frappe_app/utils/dio_help.dart';
 import 'package:injectable/injectable.dart';
-
 import '../../app/locator.dart';
 import '../../services/api/api.dart';
 import '../../model/offline_storage.dart';
-
-import '../../utils/helpers.dart';
+import '../../utils/help.dart';
 import '../../utils/http.dart';
-
 import '../../model/config.dart';
-
 import '../../views/base_viewmodel.dart';
+import 'package:frappe_app/utils/dio_help.dart';
 
 class SavedCredentials {
   String? serverURL;
@@ -83,7 +80,9 @@ class LoginViewModel extends BaseViewModel {
 
         await cacheAllUsers();
         await initAwesomeItems();
+
         await DioHelper.initCookies();
+
         getSystemSettings();
 
         loginButtonLabel = "Success";

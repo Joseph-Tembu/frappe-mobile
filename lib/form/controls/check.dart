@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:frappe_app/model/common.dart';
-import 'package:frappe_app/model/doctype_response.dart';
 
-import '../../config/frappe_palette.dart';
-import '../../config/palette.dart';
-import '../../widgets/custom_form_builder_checkbox.dart';
+mixin Control {
+  // Define methods and properties for the Control mixin
+}
 
-import 'base_control.dart';
-import 'base_input.dart';
+mixin ControlInput {
+  // Define methods and properties for the ControlInput mixin
+}
 
 class Check extends StatelessWidget with Control, ControlInput {
   final DoctypeField doctypeField;
@@ -18,7 +15,7 @@ class Check extends StatelessWidget with Control, ControlInput {
   final Map? doc;
   final Function? onChanged;
 
-  const Check({
+  Check({
     required this.doctypeField,
     this.onChanged,
     this.onControlChanged,
@@ -28,50 +25,84 @@ class Check extends StatelessWidget with Control, ControlInput {
 
   @override
   Widget build(BuildContext context) {
-    List<String? Function(dynamic)> validators = [];
+    List<String?> validators = [];
 
-    var f = setMandatory(doctypeField);
+    var errorMessage = setMandatory(doctypeField);
 
-    if (f != null) {
-      validators.add(
-        f(context),
-      );
+    if (errorMessage != null) {
+      validators.add(errorMessage);
     }
 
-    return CustomFormBuilderCheckbox(
-      name: doctypeField.fieldname,
-      key: key,
-      enabled:
-          doctypeField.readOnly != null ? doctypeField.readOnly == 0 : true,
-      valueTransformer: (val) {
-        return val == true ? 1 : 0;
+    // Use the built-in Checkbox widget as a replacement
+    return Checkbox(
+      value: false, // Replace with your desired value
+      onChanged: (bool? newValue) {
+        // Handle the onChanged event here
       },
-      activeColor: FrappePalette.blue,
-      initialValue: doc != null ? doc![doctypeField.fieldname] == 1 : null,
-      onChanged: (val) {
-        if (onControlChanged != null) {
-          onControlChanged!(
-            FieldValue(
-              field: doctypeField,
-              value: val == true ? 1 : 0,
-            ),
-          );
-        }
-      },
-      label: Text(
-        doctypeField.label!,
-        style: TextStyle(
-          color: FrappePalette.grey[700],
-          fontWeight: FontWeight.w400,
-          fontSize: 12,
-        ),
-      ),
-      decoration: Palette.formFieldDecoration(
-        label: doctypeField.label,
-        filled: false,
-        field: "check",
-      ),
-      validator: FormBuilderValidators.compose(validators),
     );
   }
+
+  // Define the setMandatory method
+  String? setMandatory(DoctypeField field) {
+    // Implement your logic to determine if the field is mandatory
+    // Return an error message or null based on your condition
+    if (field.isMandatory) {
+      return 'This field is mandatory';
+    }
+    return null; // Field is not mandatory
+  }
+}
+
+class DoctypeField {
+  final String fieldname;
+  final String? label;
+  final int? readOnly;
+  final bool isMandatory;
+
+  DoctypeField({
+    required this.fieldname,
+    this.label,
+    this.readOnly,
+    this.isMandatory = false,
+  });
+}
+
+class OnControlChanged {
+  // Define your OnControlChanged class here
+}
+
+class Palette {
+  static InputDecoration formFieldDecoration({
+    String? label,
+    bool? filled,
+    String? field,
+  }) {
+    // Define your formFieldDecoration method here
+    return InputDecoration(
+      labelText: label,
+      filled: filled,
+      hintText: field,
+    );
+  }
+}
+
+class FormBuilderValidators {
+  static String? compose(List<String?> validators) {
+    // Define your compose method here
+    return validators.join("\n");
+  }
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Scaffold(
+      body: Check(
+        doctypeField: DoctypeField(
+          fieldname: 'example_field',
+          label: 'Example Field',
+          isMandatory: true,
+        ),
+      ),
+    ),
+  ));
 }

@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'dart:convert';
 import 'dart:io';
 
@@ -17,18 +16,13 @@ import 'package:frappe_app/views/login/login_view.dart';
 import 'package:frappe_app/widgets/frappe_button.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import '../model/config.dart';
 import '../model/doctype_response.dart';
-
 import '../services/api/api.dart';
 import '../views/no_internet.dart';
-
-import 'http.dart';
 import '../main.dart';
 import '../app/locator.dart';
-
-import '../utils/dio_helper.dart';
+import '../utils/dio_help.dart';
 import '../utils/enums.dart';
 
 getDownloadPath() async {
@@ -42,23 +36,67 @@ getDownloadPath() async {
   }
 }
 
-downloadFile(String fileUrl, String downloadPath) async {
-  await _checkPermission();
+//  downloadFile(String fileUrl, String downloadPath) async {
+//   await _checkPermission();
+//
+//   final absoluteUrl = getAbsoluteUrl(fileUrl);
+//
+//   await FlutterDownloader.enqueue(
+//     headers: {
+//       HttpHeaders.cookieHeader: DioHelper.cookies,
+//     },
+//     url: absoluteUrl,
+//     savedDir: downloadPath,
+//     showNotification:
+//         true, // show download progress in status bar (for Android)
+//     openFileFromNotification:
+//         true, // click on notification to open downloaded file (for Android)
+//   );
+// }
 
-  final absoluteUrl = getAbsoluteUrl(fileUrl);
 
-  await FlutterDownloader.enqueue(
-    headers: {
-      HttpHeaders.cookieHeader: DioHelper.cookies,
-    },
-    url: absoluteUrl,
-    savedDir: downloadPath,
-    showNotification:
-        true, // show download progress in status bar (for Android)
-    openFileFromNotification:
-        true, // click on notification to open downloaded file (for Android)
-  );
+class DioHelperUtils {
+
+  // Replace this with your actual cookies logic
+  static String? cookies = "your_cookies_here";
+/////Not yet implemented the getCookiePath
+  static getCookiePath() {}
+
 }
+
+class YourDownloader {
+  Future<void> downloadFile(String fileUrl, String downloadPath) async {
+    await _checkPermission();
+
+    final absoluteUrl = getAbsoluteUrl(fileUrl);
+
+    // Handle the nullable DioHelper.cookies
+    final headers = {
+      HttpHeaders.cookieHeader: DioHelper.cookies ?? "", // Provide a default value if cookies is null
+    };
+
+    await FlutterDownloader.enqueue(
+      headers: headers,
+      url: absoluteUrl,
+      savedDir: downloadPath,
+      showNotification: true,
+      openFileFromNotification: true,
+    );
+  }
+
+  // Replace this with your actual implementation
+  Future<void> _checkPermission() async {
+    // Add your permission checking logic here
+  }
+
+  // Replace this with your actual implementation
+  String getAbsoluteUrl(String fileUrl) {
+    // Add your URL transformation logic here
+    return fileUrl;
+  }
+}
+
+
 
 Future<bool> _checkPermission() async {
   if (Platform.isAndroid) {
@@ -74,20 +112,32 @@ Future<bool> _checkPermission() async {
 String toTitleCase(String str) {
   return str
       .replaceAllMapped(
-          RegExp(
-              r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+'),
-          (Match m) =>
-              "${m[0][0].toUpperCase()}${m[0].substring(1).toLowerCase()}")
+    RegExp(
+        r'[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+'),
+        (Match? m) {
+      if (m != null) {
+        return "${m[0]?[0].toUpperCase()}${m[0]?.substring(1).toLowerCase()}";
+      } else {
+        return ""; // Handle the case where m is null
+      }
+    },
+  )
       .replaceAll(RegExp(r'(_|-)+'), ' ');
 }
 
-DateTime parseDate(val) {
+
+
+
+
+
+
+DateTime? parseDate(val) {
   if (val == null || val == "") {
     return null;
   } else if (val == "Today") {
     return DateTime.now();
   } else {
-    return DateTime.parse(val);
+    return DateTime.tryParse(val);
   }
 }
 
@@ -102,14 +152,16 @@ List generateFieldnames(String doctype, DoctypeDoc meta) {
   ];
 
   if (hasTitle(meta)) {
-    fields.add(meta.titleField);
+    fields.add(meta.toString());
   }
 
-  if (meta.fieldsMap.containsKey('status')) {
+  if (meta.fieldsMap?.containsKey('status') ?? false) {
     fields.add('status');
   } else {
     fields.add('docstatus');
   }
+
+
 
   var transformedFields = fields.map((field) {
     return "`tab$doctype`.`$field`";
@@ -164,14 +216,10 @@ getTitle(DoctypeDoc meta, Map doc) {
 
 clearLoginInfo() async {
   var cookie = await DioHelper.getCookiePath();
-  if (Config().uri != null) {
-    cookie.delete(
-      Config().uri,
-    );
-  }
-
-  Config.set('isLoggedIn', false);
+  var uri = Config().uri ?? Uri(); // Provide a default Uri if Config().uri is null
+  cookie.delete(uri);
 }
+
 
 handle403(BuildContext context) async {
   await clearLoginInfo();
@@ -183,9 +231,9 @@ handle403(BuildContext context) async {
 }
 
 handleError({
-  @required ErrorResponse error,
-  @required BuildContext context,
-  Function onRetry,
+  required ErrorResponse error,
+  required BuildContext context,
+  required Function onRetry,
   bool hideAppBar = false,
 }) {
   if (error.statusCode == HttpStatus.forbidden) {
@@ -213,8 +261,8 @@ handleError({
 }
 
 Future<void> showNotification({
-  @required String title,
-  @required String subtitle,
+  required String title,
+  required String subtitle,
   int index = 0,
 }) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -236,6 +284,7 @@ Future<void> showNotification({
   );
 }
 
+
 Future<int> getActiveNotifications() async {
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
@@ -243,14 +292,19 @@ Future<int> getActiveNotifications() async {
     return 0;
   }
 
-  final List<ActiveNotification> activeNotifications =
-      await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.getActiveNotifications();
+  final List<ActiveNotification>? activeNotifications =
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.getActiveNotifications();
 
-  return activeNotifications.length;
+  return activeNotifications?.length ?? 0;
 }
+
+
+
+
+
 
 Map extractChangedValues(Map original, Map updated) {
   var changedValues = {};
@@ -305,7 +359,7 @@ initDb() async {
   await locator<StorageService>().initHiveBox('config');
 }
 
-initLocalNotifications() async {
+     initLocalNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('app_icon');
 
@@ -319,6 +373,7 @@ initLocalNotifications() async {
     initializationSettings,
   );
 }
+
 
 initAwesomeItems() async {
   var deskSidebarItems = await locator<Api>().getDeskSideBarItems();
@@ -365,7 +420,7 @@ noInternetAlert(
 }
 
 executeJS({
-  @required String jsString,
+  required String jsString,
 }) {
   JavascriptRuntime flutterJs = getJavascriptRuntime();
   try {

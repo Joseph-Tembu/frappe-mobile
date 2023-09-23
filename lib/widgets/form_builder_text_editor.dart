@@ -1,18 +1,18 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_html/image_render.dart';
+import 'package:flutter_html_v3/custom_render.dart';
 import 'package:frappe_app/config/palette.dart';
 import 'package:frappe_app/model/config.dart';
-import 'package:frappe_app/utils/dio_helper.dart';
+import 'package:frappe_app/utils/dio_help.dart';
 import 'package:frappe_app/views/login/login_view.dart';
 import 'package:html/parser.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:frappe_app/utils/enums.dart' as enums;
 import 'frappe_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart'; // Make sure to import the correct package
 
 class FormBuilderTextEditor<T> extends FormBuilderField<T> {
   FormBuilderTextEditor({
@@ -62,9 +62,14 @@ class FormBuilderTextEditor<T> extends FormBuilderField<T> {
                   color: color ?? Palette.fieldBgColor,
                   child: SingleChildScrollView(
                     child: field.value != null
-                        ? Html(
+                        ?
+
+                    // data: field.value as String,
+
+
+                    Html(
                             data: field.value as String,
-                            customRender: {
+                              customRender: {
                               "img": (renderContext, child) {
                                 var src = renderContext.tree.attributes['src'];
                                 if (src != null) {
@@ -74,13 +79,14 @@ class FormBuilderTextEditor<T> extends FormBuilderField<T> {
                                   return Image.network(
                                     src,
                                     headers: {
-                                      HttpHeaders.cookieHeader:
-                                          DioHelper.cookies!,
+                                      HttpHeaders.cookieHeader: DioHelper.cookies!,
                                     },
                                   );
                                 }
                               },
                             },
+
+
                             customImageRenders: {
                               networkSourceMatcher(domains: [
                                 Config().baseUrl!,
@@ -106,16 +112,43 @@ class FormBuilderTextEditor<T> extends FormBuilderField<T> {
                               networkSourceMatcher(): networkImageRender(
                                   altWidget: (_) => FrappeLogo()),
                             },
-                            onLinkTap: (url, _, __, ___) {
-                              print("Opening $url...");
-                            },
-                            onImageTap: (src, _, __, ___) {
-                              print(src);
-                            },
-                            onImageError: (exception, stackTrace) {
-                              print(exception);
-                            },
-                          )
+
+
+
+                            // onLinkTap: (url, _, __, ___) {
+                            //   print("Opening $url...");
+                            // },
+                            // onImageTap: (src, _, __, ___) {
+                            //   print(src);
+                            // },
+                            // onImageError: (exception, stackTrace) {
+                            //   print(exception);
+                            // },
+                            //
+                            //
+
+                      onLinkTap: (url, attributes, element) {
+                        print("Opening $url...");
+                      },
+                      // onImageTap: (src, context, attributes, element) {
+                      //   print(src);
+                      // },
+                      // onImageError: (exception, stackTrace, context) {
+                      //   print(exception);
+                      // },
+
+
+
+
+
+
+                    )
+
+
+
+
+
+
                         : Container(),
                   ),
                 ),
@@ -123,6 +156,12 @@ class FormBuilderTextEditor<T> extends FormBuilderField<T> {
             );
           },
         );
+
+
+
+
+
+
 
   @override
   _FormBuilderTextEditorState<T> createState() =>

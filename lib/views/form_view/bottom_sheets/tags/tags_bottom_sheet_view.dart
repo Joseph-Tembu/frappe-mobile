@@ -1,4 +1,3 @@
-// @dart=2.9
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -20,11 +19,11 @@ class TagsBottomSheetView extends StatefulWidget {
   final Function refreshCallback;
 
   const TagsBottomSheetView({
-    Key key,
-    @required this.doctype,
-    @required this.name,
-    @required this.tags,
-    @required this.refreshCallback,
+    required Key key,
+    required this.doctype,
+    required this.name,
+    required this.tags,
+    required this.refreshCallback,
   }) : super(key: key);
 
   @override
@@ -149,8 +148,8 @@ class _TagsBottomSheetViewState extends State<TagsBottomSheetView> {
   }
 
   List<Widget> _generateChildren({
-    @required TagsBottomSheetViewModel model,
-    BuildContext context,
+    required TagsBottomSheetViewModel model,
+    required BuildContext context,
   }) {
     return model.currentTags.asMap().entries.map<Widget>(
       (entry) {

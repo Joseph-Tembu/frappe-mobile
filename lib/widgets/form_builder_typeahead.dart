@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -261,31 +260,31 @@ class FormBuilderTypeAhead<T> extends FormBuilderField<T> {
 
   /// Creates text field that auto-completes user input from a list of items
   FormBuilderTypeAhead({
-    Key key,
+    required Key key,
     //From Super
-    @required String name,
-    FormFieldValidator<T> validator,
-    T initialValue,
+    required String name,
+    required FormFieldValidator<T> validator,
+    required T initialValue,
     InputDecoration decoration = const InputDecoration(),
-    ValueChanged<T> onChanged,
-    ValueTransformer<T> valueTransformer,
+    required ValueChanged<T> onChanged,
+    required ValueTransformer<T> valueTransformer,
     bool enabled = true,
-    FormFieldSetter<T> onSaved,
+    required FormFieldSetter<T> onSaved,
     AutovalidateMode autovalidateMode = AutovalidateMode.disabled,
-    VoidCallback onReset,
-    FocusNode focusNode,
-    @required this.itemBuilder,
-    @required this.suggestionsCallback,
+    required VoidCallback onReset,
+    required FocusNode focusNode,
+    required this.itemBuilder,
+    required this.suggestionsCallback,
     this.getImmediateSuggestions = false,
-    this.selectionToTextTransformer,
-    this.errorBuilder,
-    this.noItemsFoundBuilder,
-    this.loadingBuilder,
+    required this.selectionToTextTransformer,
+    required this.errorBuilder,
+    required this.noItemsFoundBuilder,
+    required this.loadingBuilder,
     this.debounceDuration = const Duration(milliseconds: 300),
     this.suggestionsBoxDecoration = const SuggestionsBoxDecoration(),
     this.suggestionsBoxVerticalOffset = 5.0,
     this.textFieldConfiguration = const TextFieldConfiguration(),
-    this.transitionBuilder,
+    required this.transitionBuilder,
     this.animationDuration = const Duration(milliseconds: 500),
     this.animationStart = 0.25,
     this.direction = AxisDirection.down,
@@ -295,10 +294,10 @@ class FormBuilderTypeAhead<T> extends FormBuilderField<T> {
     this.hideSuggestionsOnKeyboardHide = true,
     this.keepSuggestionsOnLoading = true,
     this.autoFlipDirection = false,
-    this.suggestionsBoxController,
+    required this.suggestionsBoxController,
     this.keepSuggestionsOnSuggestionSelected = false,
-    this.onSuggestionSelected,
-    this.controller,
+    required this.onSuggestionSelected,
+    required this.controller,
     this.hideKeyboard = false,
   })  : assert(T == String || selectionToTextTransformer != null),
         super(
@@ -306,13 +305,13 @@ class FormBuilderTypeAhead<T> extends FormBuilderField<T> {
           initialValue: initialValue,
           name: name,
           validator: validator,
-          valueTransformer: valueTransformer,
-          onChanged: onChanged,
+          // valueTransformer: valueTransformer,
+          // onChanged: onChanged,
           autovalidateMode: autovalidateMode,
           onSaved: onSaved,
           enabled: enabled,
           onReset: onReset,
-          decoration: decoration,
+          // decoration: decoration,
           focusNode: focusNode,
           builder: (FormFieldState<T> field) {
             final state = field as _FormBuilderTypeAheadState<T>;
@@ -322,13 +321,11 @@ class FormBuilderTypeAhead<T> extends FormBuilderField<T> {
               textFieldConfiguration: textFieldConfiguration.copyWith(
                 enabled: state.enabled,
                 controller: state._typeAheadController,
-                style: state.enabled
-                    ? textFieldConfiguration.style
-                    : theme.textTheme.subtitle1.copyWith(
+                style: state.enabled ? textFieldConfiguration.style : theme.textTheme.subtitle1?.copyWith(
                         color: theme.disabledColor,
                       ),
                 focusNode: state.effectiveFocusNode,
-                decoration: state.decoration,
+                // decoration: state.decoration,
               ),
               // HACK to satisfy strictness
               suggestionsCallback: suggestionsCallback,
@@ -376,7 +373,7 @@ class FormBuilderTypeAhead<T> extends FormBuilderField<T> {
 
 class _FormBuilderTypeAheadState<T>
     extends FormBuilderFieldState<FormBuilderTypeAhead<T>, T> {
-  TextEditingController _typeAheadController;
+  late TextEditingController _typeAheadController;
 
   @override
   void initState() {
@@ -400,7 +397,7 @@ class _FormBuilderTypeAheadState<T>
   }
 
   @override
-  void didChange(T value) {
+  void didChange(T? value) {
     super.didChange(value);
 
     if (_typeAheadController.text != value) {
@@ -420,6 +417,6 @@ class _FormBuilderTypeAheadState<T>
   @override
   void reset() {
     super.reset();
-    _typeAheadController.text = initialValue?.toString();
+    _typeAheadController.text = initialValue!.toString();
   }
 }

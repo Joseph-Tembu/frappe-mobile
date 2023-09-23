@@ -11,12 +11,9 @@ import 'package:frappe_app/model/common.dart';
 import 'package:frappe_app/model/doctype_response.dart';
 import 'package:frappe_app/model/get_doc_response.dart';
 import 'package:frappe_app/utils/frappe_alert.dart';
-
 import 'package:frappe_app/utils/frappe_icon.dart';
 import 'package:frappe_app/views/base_view.dart';
-
 import 'package:frappe_app/widgets/frappe_bottom_sheet.dart';
-
 import 'add_review_bottom_sheet_viewmodel.dart';
 
 class AddReviewBottomSheetView extends StatefulWidget {
@@ -122,7 +119,7 @@ class _AddReviewBottomSheetViewState extends State<AddReviewBottomSheetView> {
                       buildDecoratedControl(
                         field: model.fields[3],
                         control: SmallText(
-                          doctypeField: model.fields[3],
+                            model.fields[3].small_text.DoctypeField
                         ),
                       )
                     ],

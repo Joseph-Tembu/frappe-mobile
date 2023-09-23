@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frappe_app/model/desk_sidebar_items_response.dart';
 
-import 'package:frappe_app/utils/helpers.dart';
+import 'package:frappe_app/utils/help.dart';
 import 'package:frappe_app/utils/navigation_helper.dart';
 import 'package:frappe_app/widgets/padded_card_list_tile.dart';
 
 import 'package:provider/provider.dart';
 
+import '../../model/common.dart';
 import '../../model/desktop_page_response.dart';
 
 import '../../config/frappe_palette.dart';
@@ -48,11 +49,12 @@ class DeskView extends StatelessWidget {
             ),
           );
         } else if (model.hasError) {
+          final errorToDisplay = model.error ?? ErrorResponse(); // Provide a default ErrorResponse if model.error is null
           return handleError(
             onRetry: () {
               model.getData();
             },
-            error: model.error,
+            error: errorToDisplay, // Use the non-nullable ErrorResponse
             context: context,
           );
         } else {
@@ -87,8 +89,8 @@ class DeskView extends StatelessWidget {
                 },
                 child: Builder(
                   builder: (
-                    context,
-                  ) {
+                      context,
+                      ) {
                     return ListView(
                       padding: EdgeInsets.zero,
                       children: _generateChildren(
@@ -106,6 +108,8 @@ class DeskView extends StatelessWidget {
       },
     );
   }
+}
+
 
   Widget _heading(String title) {
     return Padding(
@@ -295,7 +299,7 @@ class DeskView extends StatelessWidget {
 
     return widgets;
   }
-}
+
 
 class ShowModules extends StatelessWidget {
   final DeskViewModel model;

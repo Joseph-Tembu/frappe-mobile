@@ -1,10 +1,8 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:path_provider/path_provider.dart';
-
 import '../model/config.dart';
 
 class DioHelper {
@@ -20,8 +18,8 @@ class DioHelper {
     )..interceptors.add(
         CookieManager(cookieJar),
       );
-    dio?.options.connectTimeout = 60 * 1000;
-    dio?.options.receiveTimeout = 60 * 1000;
+    dio?.options.connectTimeout = (60 * 1000) as Duration?;
+    dio?.options.receiveTimeout = (60 * 1000) as Duration?;
   }
 
   static Future initCookies() async {
